@@ -1,0 +1,7 @@
+wheel
+aiogram
+python-dotenv
+rich
+aiohttp
+validators
+sqlitedict
