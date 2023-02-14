@@ -1,6 +1,5 @@
 from functools import wraps
 import datetime
-from bot.common import bot
 from bot.db import db, DBTables
 import asyncio
 from aiogram import types
@@ -33,10 +32,13 @@ def throttle(cooldown: int = 5, by_id: bool = True, admin_ids: list = None):
 
             if last_time <= delta:
                 try:
-                    db[DBTables.cooldown][func.__name__][user_id] = now
+                    f_name_dict = db[DBTables.cooldown][func.__name__]
+                    f_name_dict[user_id] = now
+                    db[DBTables.cooldown][func.__name__] = f_name_dict
                 except KeyError:
-                    db[DBTables.cooldown][func.__name__] = dict()
-                    db[DBTables.cooldown][func.__name__][user_id] = now
+                    f_name_dict = dict()
+                    f_name_dict[user_id] = now
+                    db[DBTables.cooldown][func.__name__] = f_name_dict
                 try:
                     return asyncio.create_task(func(*args, **kwargs))
                 except Exception as e:
