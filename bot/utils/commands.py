@@ -4,7 +4,7 @@ from bot.common import bot
 
 
 async def set_commands():
-    from bot.handlers.help.help_strings import help_data
+    from bot.handlers.help_command.help_strings import help_data
 
     await bot.set_my_commands(
         commands=list(

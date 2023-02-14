@@ -1,9 +1,7 @@
 from aiogram import types
-from bot.common import dp
 from .help_strings import help_data
 
 
-@dp.message_handler(commands='help')
 async def help_command(message: types.Message):
     if message.get_args() == "":
         await message.reply(

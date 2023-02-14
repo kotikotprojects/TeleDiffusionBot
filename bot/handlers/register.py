@@ -2,10 +2,13 @@ from rich import print
 
 
 def import_handlers():
-    import bot.handlers.help.help
-    assert bot.handlers.help.help
+    from bot.handlers import (
+        initialize, admin, help_command, txt2img
+    )
 
-    import bot.handlers.initialize.pull_db
-    assert bot.handlers.initialize.pull_db
+    initialize.register()
+    admin.register()
+    help_command.register()
+    txt2img.register()
 
     print('[gray]All handlers imported[/]')

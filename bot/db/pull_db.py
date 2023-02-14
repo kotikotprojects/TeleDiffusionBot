@@ -40,7 +40,6 @@ async def pull():
 
     from .db import db
     for table in DBTables.tables:
-        db[table].clear()
         new_table = SqliteDict(DB + 'b', tablename=table)
         for key in new_table.keys():
             db[table][key] = new_table[key]
