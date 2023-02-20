@@ -1,7 +1,7 @@
 from rich import print
 
 
-def import_handlers():
+def register_handlers():
     from bot.handlers import (
         initialize, admin, help_command, txt2img
     )
@@ -11,4 +11,4 @@ def import_handlers():
     help_command.register()
     txt2img.register()
 
-    print('[gray]All handlers imported[/]')
+    print('[gray]All handlers registered[/]')

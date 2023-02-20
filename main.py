@@ -4,11 +4,13 @@ from rich import print
 
 async def main():
     print(BARS_APP_ID)
-    import bot.handlers.register
     from bot.common import dp
+    import bot.handlers.register
+    import bot.callbacks.register
     from bot.utils.commands import set_commands
 
-    bot.handlers.register.import_handlers()
+    bot.handlers.register.register_handlers()
+    bot.callbacks.register.register_callbacks()
     await set_commands()
     print('[green]Bot will start now[/]')
     await dp.skip_updates()

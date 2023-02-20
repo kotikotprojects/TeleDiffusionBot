@@ -8,5 +8,8 @@ if not os.path.isfile(DB):
 
 db = {
     'config': DBDict(DB, autocommit=True, tablename='config'),
-    'cooldown': DBDict(DB, autocommit=True, tablename='cooldown')
+    'cooldown': DBDict(DB, autocommit=True, tablename='cooldown'),
+    'exceptions': DBDict(DB, autocommit=True, tablename='exceptions'),
+    'queue': DBDict(DB, autocommit=True, tablename='queue'),
+    'generated': DBDict(DB, autocommit=True, tablename='generated')
 }
