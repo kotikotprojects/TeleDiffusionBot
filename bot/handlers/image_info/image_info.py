@@ -19,6 +19,7 @@ async def imginfo(message: types.Message):
             return
 
         await message.reply(str(original_r))
+        # TODO: Pretty print this
 
     except IndexError:
         await message.reply('❌ Reply with this command on PICTURE', parse_mode='html')
