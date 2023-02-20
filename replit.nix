@@ -2,6 +2,7 @@
   deps = [
     pkgs.strace
     pkgs.python310Full
+    pkgs.python310Packages.pip.out
     pkgs.replitPackages.prybar-python310
     pkgs.replitPackages.stderred
   ];
