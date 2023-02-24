@@ -8,12 +8,13 @@ from .meta import DBMeta
 
 
 class DBTables:
-    tables = ['config', 'cooldown', 'exceptions', 'queue', 'generated']
+    tables = ['config', 'cooldown', 'exceptions', 'queue', 'generated', 'prompts']
     config = "config"
     cooldown = "cooldown"
     exceptions = "exceptions"
     queue = "queue"
     generated = "generated"
+    prompts = "prompts"
 
 
 class DBDict(SqliteDict):

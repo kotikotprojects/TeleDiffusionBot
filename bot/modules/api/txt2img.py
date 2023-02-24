@@ -1,12 +1,12 @@
 import aiohttp
-from bot.db import db, DBTables
+from bot.db import db, DBTables, decrypt
 from .objects.prompt_request import Prompt
 import json
 import base64
 
 
 async def txt2img(prompt: Prompt, ignore_exceptions: bool = False) -> list[bytes, dict] | None:
-    endpoint = db[DBTables.config].get('endpoint')
+    endpoint = decrypt(db[DBTables.config].get('endpoint'))
     try:
         async with aiohttp.ClientSession() as session:
             r = await session.post(

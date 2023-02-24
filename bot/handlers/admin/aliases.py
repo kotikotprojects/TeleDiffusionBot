@@ -1,5 +1,5 @@
 from aiogram import types
-from bot.db import db, DBTables
+from bot.db import db, DBTables, encrypt
 import validators
 from bot.config import ADMIN
 from bot.utils.cooldown import throttle
@@ -16,7 +16,7 @@ async def set_endpoint(message: types.Message):
         await message.reply("❌ Specify correct url for endpoint")
         return
 
-    db[DBTables.config]['endpoint'] = message.get_args()
+    db[DBTables.config]['endpoint'] = encrypt(message.get_args())
 
     await db[DBTables.config].write()
 

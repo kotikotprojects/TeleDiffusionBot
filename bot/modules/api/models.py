@@ -1,10 +1,10 @@
 import aiohttp
-from bot.db import db, DBTables
+from bot.db import db, DBTables, decrypt
 from rich import print
 
 
 async def get_models():
-    endpoint = db[DBTables.config].get('endpoint')
+    endpoint = decrypt(db[DBTables.config].get('endpoint'))
     try:
         async with aiohttp.ClientSession() as session:
             r = await session.get(endpoint + "/sdapi/v1/sd-models")
@@ -17,7 +17,7 @@ async def get_models():
 
 
 async def set_model(model_name: str):
-    endpoint = db[DBTables.config].get('endpoint')
+    endpoint = decrypt(db[DBTables.config].get('endpoint'))
     try:
         async with aiohttp.ClientSession() as session:
             r = await session.post(endpoint + "/sdapi/v1/options", json={

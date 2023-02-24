@@ -11,5 +11,6 @@ db = {
     'cooldown': DBDict(DB, autocommit=True, tablename='cooldown'),
     'exceptions': DBDict(DB, autocommit=True, tablename='exceptions'),
     'queue': DBDict(DB, autocommit=True, tablename='queue'),
-    'generated': DBDict(DB, autocommit=True, tablename='generated')
+    'generated': DBDict(DB, autocommit=True, tablename='generated'),
+    'prompts': DBDict(DB, autocommit=True, tablename='prompts')
 }

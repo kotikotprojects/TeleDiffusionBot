@@ -6,11 +6,11 @@ from aiogram import types
 
 
 def not_allowed(message: types.Message, cd: int, by_id: bool):
+    text = f"❌ Wait for cooldown ({cd}s for this command) " \
+           f"{'. Please note that this cooldown is for all users' if not by_id else ''}"
     return asyncio.create_task(message.reply(
-        text=
-        f"❌ Wait for cooldown ({cd}s for this command)"
-        f"{'. Please note that this cooldown is for all users' if not by_id else ''}"
-    ))
+        text=text
+    ) if hasattr(message, 'reply') else message.answer(text=text, show_alert=True))
 
 
 def throttle(cooldown: int = 5, by_id: bool = True, admin_ids: list = None):

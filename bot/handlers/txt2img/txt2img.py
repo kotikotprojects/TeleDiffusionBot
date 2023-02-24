@@ -12,9 +12,13 @@ from aiohttp import ClientConnectorError
 @throttle(cooldown=30, admin_ids=db[DBTables.config].get('admins'))
 async def txt2img_comand(message: types.Message):
     temp_message = await message.reply("⏳ Enqueued...")
-    if not message.get_args():
-        await temp_message.edit_text("😶‍🌫️ Specify prompt for this command. Check /help txt2img")
-        return
+
+    prompt: Prompt = db[DBTables.prompts].get(message.from_id)
+    if not prompt:
+        if message.get_args():
+            db[DBTables.prompts][message.from_id] = Prompt(message.get_args(), creator=message.from_id)
+
+    # TODO: Move it to other module
 
     try:
         db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 0) + 1
