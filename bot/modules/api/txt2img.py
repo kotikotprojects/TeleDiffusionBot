@@ -22,8 +22,10 @@ async def txt2img(prompt: Prompt, ignore_exceptions: bool = False) -> list[bytes
                     "sampler_index": prompt.sampler
                 }
             )
-            if r.status != 200:
+            if r.status != 200 and ignore_exceptions:
                 return None
+            elif r.status != 200:
+                raise ValueError((await r.json())['detail'])
             return [base64.b64decode((await r.json())["images"][0]),
                     json.loads((await r.json())["info"])]
     except Exception as e:

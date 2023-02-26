@@ -5,7 +5,7 @@ from .factories.image_info import full_prompt, prompt_only, import_prompt, back
 from bot.keyboards.image_info import get_img_info_keyboard, get_img_back_keyboard
 from bot.utils.cooldown import throttle
 from bot.utils.private_keyboard import other_user
-from bot.modules.api.objects.prompt_request import Prompt
+from bot.modules.api.objects.prompt_request import Generated
 
 
 async def on_back(call: types.CallbackQuery, callback_data: dict):
@@ -26,11 +26,11 @@ async def on_prompt_only(call: types.CallbackQuery, callback_data: dict):
     if await other_user(call):
         return
 
-    prompt: Prompt = db[DBTables.generated].get(p_id)
+    prompt: Generated = db[DBTables.generated].get(p_id)
 
     await call.message.edit_text(
-        f"🖤 Prompt: {prompt.prompt} \n"
-        f"{f'🐊 Negative: {prompt.negative_prompt}' if prompt.negative_prompt else ''}",
+        f"🖤 Prompt: {prompt.prompt.prompt} \n"
+        f"{f'🐊 Negative: {prompt.prompt.negative_prompt}' if prompt.prompt.negative_prompt else ''}",
         parse_mode='html',
         reply_markup=get_img_back_keyboard(p_id)
     )
@@ -42,16 +42,18 @@ async def on_full_info(call: types.CallbackQuery, callback_data: dict):
     if await other_user(call):
         return
 
-    prompt: Prompt = db[DBTables.generated].get(p_id)
+    prompt: Generated = db[DBTables.generated].get(p_id)
 
     await call.message.edit_text(
-        f"🖤 Prompt: {prompt.prompt} \n"
-        f"🐊 Negative: {prompt.negative_prompt} \n"
-        f"🪜 Steps: {prompt.steps} \n"
-        f"🧑‍🎨 CFG Scale: {prompt.cfg_scale} \n"
-        f"🖥️ Size: {prompt.width}x{prompt.height} \n"
-        f"😀 Restore faces: {'on' if prompt.restore_faces else 'off'} \n"
-        f"⚒️ Sampler: {prompt.sampler}",
+        f"🖤 Prompt: {prompt.prompt.prompt} \n"
+        f"🐊 Negative: {prompt.prompt.negative_prompt} \n"
+        f"💫 Model: {prompt.model} \n"
+        f"🪜 Steps: {prompt.prompt.steps} \n"
+        f"🧑‍🎨 CFG Scale: {prompt.prompt.cfg_scale} \n"
+        f"🖥️ Size: {prompt.prompt.width}x{prompt.prompt.height} \n"
+        f"😀 Restore faces: {'on' if prompt.prompt.restore_faces else 'off'} \n"
+        f"⚒️ Sampler: {prompt.prompt.sampler} \n"
+        f"🌱 Seed: {prompt.seed}",
         parse_mode='html',
         reply_markup=get_img_back_keyboard(p_id)
     )
@@ -63,7 +65,7 @@ async def on_import(call: types.CallbackQuery, callback_data: dict):
     if await other_user(call):
         return
 
-    prompt: Prompt = db[DBTables.generated].get(p_id)
+    prompt: Generated = db[DBTables.generated].get(p_id)
 
     await call.message.edit_text(
         f"😶‍🌫️ Not implemented yet",

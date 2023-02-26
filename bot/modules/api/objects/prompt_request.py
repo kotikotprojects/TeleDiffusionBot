@@ -12,3 +12,10 @@ class Prompt:
     restore_faces: bool = True
     sampler: str = "Euler a"
     creator: int = None
+
+
+@dataclasses.dataclass
+class Generated:
+    prompt: Prompt
+    seed: int
+    model: str
