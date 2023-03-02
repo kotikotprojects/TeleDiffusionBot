@@ -11,5 +11,7 @@ help_data = {
     'setsampler': 'Set StableDiffusion sampler',
     'setscale': 'Set CFG Scale (prompt stringency)',
     'setfaces': 'Set restore faces mode',
-    'setendpoint': '(admin) Set StableDiffusion API endpoint'
+    'setendpoint': '(admin) Set StableDiffusion API endpoint',
+    'addadmin': '(admin) Add new admin - reply to message or type user ID',
+    'rmadmin': '(admin) Remove admin - reply to message or type user ID'
 }
