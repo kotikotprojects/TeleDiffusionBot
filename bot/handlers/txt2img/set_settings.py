@@ -20,6 +20,8 @@ async def _set_property(message: types.Message, prop: str, value=None):
                                          f"medium hair, cat ears, closed eyes, looking at viewer, :3, cute, scarf, "
                                          f"jacket, outdoors, streets</code>", parse_mode='HTML')
             return
+        elif prompt is None:
+            prompt = Prompt(message.get_args(), creator=message.from_id)
 
         prompt.__setattr__(prop, message.get_args() if value is None else value)
         prompt.creator = message.from_id
@@ -139,13 +141,14 @@ async def set_sampler_command(message: types.Message):
     except ClientConnectorError:
         await message.reply('❌ Error! Maybe, StableDiffusion API endpoint is incorrect '
                             'or turned off')
+        await temp_message.delete()
+        return
     except Exception as e:
         exception_id = f'{message.message_thread_id}-{message.message_id}'
         db[DBTables.exceptions][exception_id] = PrettyException(e)
         await message.reply('❌ Error happened while processing your request', parse_mode='html',
                             reply_markup=get_exception_keyboard(exception_id))
         await temp_message.delete()
-        db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
         return
 
     await _set_property(message, 'sampler')
