@@ -2,7 +2,7 @@ import aiohttp
 from bot.db import db, DBTables, decrypt
 
 
-async def get_models():
+async def get_models() -> list | None:
     endpoint = decrypt(db[DBTables.config].get('endpoint'))
     async with aiohttp.ClientSession() as session:
         r = await session.get(endpoint + "/sdapi/v1/sd-models")

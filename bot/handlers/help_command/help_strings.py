@@ -11,6 +11,8 @@ help_data = {
     'setsampler': 'Set StableDiffusion sampler',
     'setscale': 'Set CFG Scale (prompt stringency)',
     'setfaces': 'Set restore faces mode',
+    'status': 'Ping API endpoint host',
+    'setmodel': '(global) Sets StableDiffusion model for all users. Can be used only once an hour',
     'setendpoint': '(admin) Set StableDiffusion API endpoint',
     'addadmin': '(admin) Add new admin - reply to message or type user ID',
     'rmadmin': '(admin) Remove admin - reply to message or type user ID'
