@@ -4,35 +4,18 @@ from aiogram import types
 from .factories.set_model import set_model, set_model_page
 from bot.keyboards.set_model import get_set_model_keyboard
 from bot.utils.private_keyboard import other_user
-from bot.keyboards.exception import get_exception_keyboard
-from bot.utils.trace_exception import PrettyException
-from aiohttp import ClientConnectorError
 from bot.modules.api import models
+from bot.utils.errorable_command import wrap_exception
 
 
+@wrap_exception()
 async def on_set_model(call: types.CallbackQuery, callback_data: dict):
     n = int(callback_data['n'])
-    temp_message = await call.message.answer('⏳ Setting model...')
-    try:
-        await models.set_model(db[DBTables.config]['models'][n])
+    await call.message.edit_reply_markup(reply_markup=None)
+    await models.set_model(db[DBTables.config]['models'][n])
 
-    except ClientConnectorError:
-        await call.answer('❌ Error! Maybe, StableDiffusion API endpoint is incorrect '
-                          'or turned off', show_alert=True)
-        await call.message.delete()
-        await temp_message.delete()
-        return
-
-    except Exception as e:
-        exception_id = f'{call.message.message_thread_id}-{call.message.message_id}'
-        db[DBTables.exceptions][exception_id] = PrettyException(e)
-        await call.message.reply('❌ Error happened while processing your request', parse_mode='html',
-                                 reply_markup=get_exception_keyboard(exception_id))
-        db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
-        return
-
-    await temp_message.answer('✅ Model set for all users!')
-    await temp_message.delete()
+    await call.message.answer('✅ Model set for all users!')
+    await call.message.delete()
 
 
 async def on_page_change(call: types.CallbackQuery, callback_data: dict):

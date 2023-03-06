@@ -6,12 +6,11 @@ from bot.modules.api.txt2img import txt2img
 from bot.modules.api.objects.get_prompt import get_prompt
 from bot.modules.api.objects.prompt_request import Generated
 from bot.modules.api.status import wait_for_status
-from bot.keyboards.exception import get_exception_keyboard
 from bot.keyboards.image_info import get_img_info_keyboard
-from bot.utils.trace_exception import PrettyException
-from aiohttp import ClientConnectorError
+from bot.utils.errorable_command import wrap_exception
 
 
+@wrap_exception([ValueError], custom_loading=True)
 @throttle(cooldown=30, admin_ids=db[DBTables.config].get('admins'))
 async def generate_command(message: types.Message):
     temp_message = await message.reply("⏳ Enqueued...")
@@ -33,10 +32,10 @@ async def generate_command(message: types.Message):
         await wait_for_status()
 
         await temp_message.edit_text(f"⌛ Generating...")
+        db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
         image = await txt2img(prompt)
         image_message = await message.reply_photo(photo=image[0])
 
-        db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
         db[DBTables.generated][image_message.photo[0].file_unique_id] = Generated(
             prompt=prompt,
             seed=image[1]['seed'],
@@ -50,24 +49,8 @@ async def generate_command(message: types.Message):
 
         await db[DBTables.config].write()
 
-    except ClientConnectorError:
-        await message.reply('❌ Error! Maybe, StableDiffusion API endpoint is incorrect '
-                            'or turned off')
-        await temp_message.delete()
-        db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
-        return
-
     except ValueError as e:
         await message.reply(f'❌ Error! {e.args[0]}')
-        await temp_message.delete()
-        db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
-        return
-
-    except Exception as e:
-        exception_id = f'{message.message_thread_id}-{message.message_id}'
-        db[DBTables.exceptions][exception_id] = PrettyException(e)
-        await message.reply('❌ Error happened while processing your request', parse_mode='html',
-                            reply_markup=get_exception_keyboard(exception_id))
         await temp_message.delete()
         db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
         return
