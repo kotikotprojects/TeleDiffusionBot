@@ -1,6 +1,7 @@
 from aiogram import types
 from bot.db import db, DBTables
 from bot.callbacks.factories.set_model import set_model_page, set_model
+from bot.callbacks.factories.common import close_keyboard_data
 
 
 def get_set_model_keyboard(page: int) -> types.InlineKeyboardMarkup:
@@ -27,5 +28,9 @@ def get_set_model_keyboard(page: int) -> types.InlineKeyboardMarkup:
         keyboard.row(*navigation_buttons)
     else:
         keyboard.add(*models_buttons)
+
+    keyboard.add(
+        types.InlineKeyboardButton("🔻 Cancel", callback_data=close_keyboard_data.new())
+    )
 
     return keyboard

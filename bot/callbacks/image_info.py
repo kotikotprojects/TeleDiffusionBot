@@ -6,8 +6,10 @@ from bot.keyboards.image_info import get_img_info_keyboard, get_img_back_keyboar
 from bot.utils.cooldown import throttle
 from bot.utils.private_keyboard import other_user
 from bot.modules.api.objects.prompt_request import Generated
+from bot.utils.errorable_command import wrap_exception
 
 
+@wrap_exception()
 async def on_back(call: types.CallbackQuery, callback_data: dict):
     p_id = callback_data['p_id']
     if await other_user(call):
@@ -20,6 +22,7 @@ async def on_back(call: types.CallbackQuery, callback_data: dict):
     )
 
 
+@wrap_exception()
 @throttle(5)
 async def on_prompt_only(call: types.CallbackQuery, callback_data: dict):
     p_id = callback_data['p_id']
@@ -36,6 +39,7 @@ async def on_prompt_only(call: types.CallbackQuery, callback_data: dict):
     )
 
 
+@wrap_exception()
 @throttle(5)
 async def on_full_info(call: types.CallbackQuery, callback_data: dict):
     p_id = callback_data['p_id']
@@ -59,17 +63,21 @@ async def on_full_info(call: types.CallbackQuery, callback_data: dict):
     )
 
 
+@wrap_exception()
 @throttle(5)
 async def on_import(call: types.CallbackQuery, callback_data: dict):
     p_id = callback_data['p_id']
     if await other_user(call):
         return
 
-    prompt: Generated = db[DBTables.generated].get(p_id)
+    generated: Generated = db[DBTables.generated].get(p_id)
+    prompt = generated.prompt
+    prompt.creator = call.from_user.id
+    db[DBTables.prompts][call.from_user.id] = prompt
+    await db[DBTables.config].write()
 
     await call.message.edit_text(
-        f"😶‍🌫️ Not implemented yet",
-        parse_mode='html',
+        f"️🥐 Prompt imported",
         reply_markup=get_img_back_keyboard(p_id)
     )
 
