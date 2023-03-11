@@ -57,6 +57,8 @@ def get_admin_settings_keyboard() -> types.InlineKeyboardMarkup:
         types.InlineKeyboardButton("Remove admin", callback_data=admin_settings_data.new("aliases.remove_admin")),
         types.InlineKeyboardButton("Set API endpoint", callback_data=admin_settings_data.new("aliases.set_endpoint")),
         types.InlineKeyboardButton("Reset generation queue", callback_data=admin_settings_data.new("reset.resetqueue")),
+        types.InlineKeyboardButton("Turn on/off generation",
+                                   callback_data=admin_settings_data.new("on_off.on_off_call")),
         types.InlineKeyboardButton("👈 Back", callback_data="config_back"),
         types.InlineKeyboardButton("🔻 Close", callback_data="close_keyboard")
     ]

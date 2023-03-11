@@ -31,6 +31,7 @@ async def on_admin_settings_set(call: types.CallbackQuery, callback_data: dict):
         if 'aliases' in overload and 'admin' in overload and ('add' in overload or 'remove' in overload)
         else f"⚒️ Type new endpoint address: " if "aliases.set_endpoint" in overload
         else f"⚒️ Type \"reset\" if you REALLY want to reset queue: " if "reset.resetqueue" in overload
+        else f"⚒️ Type \"on\" or \"off\" to change generation mode: " if "on_off" in overload
         else f"❌ Not found...",
         reply_markup=types.InlineKeyboardMarkup().add(types.InlineKeyboardButton(
             "👈 Back",

@@ -14,6 +14,10 @@ from bot.utils.errorable_command import wrap_exception
 @throttle(cooldown=30, admin_ids=db[DBTables.config].get('admins'))
 async def generate_command(message: types.Message):
     temp_message = await message.reply("⏳ Enqueued...")
+    if not db[DBTables.config]['enabled']:
+        await message.reply('💔 Generation is disabled by admins now. Try again later')
+        await temp_message.delete()
+        return
 
     try:
         prompt = get_prompt(user_id=message.from_id,

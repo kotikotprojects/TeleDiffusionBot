@@ -2,6 +2,7 @@ from bot.common import dp
 from .aliases import *
 from .reset import *
 from .tools import *
+from .on_off import *
 
 
 def register():
