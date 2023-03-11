@@ -6,12 +6,14 @@ def register_callbacks():
         exception,
         image_info,
         set_model,
-        common
+        common,
+        config
     )
 
     exception.register()
     image_info.register()
     set_model.register()
     common.register()
+    config.register()
 
     print('[gray]All callbacks registered[/]')

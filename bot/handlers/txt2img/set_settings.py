@@ -6,9 +6,9 @@ from bot.utils.errorable_command import wrap_exception
 
 
 @wrap_exception(custom_loading=True)
-async def _set_property(message: types.Message, prop: str, value=None):
+async def _set_property(message: types.Message, prop: str, value=None, is_command: bool = True):
     temp_message = await message.reply(f"⏳ Setting {prop}...")
-    if not message.get_args():
+    if not message.get_args() and is_command:
         await temp_message.edit_text("😶‍🌫️ Specify arguments for this command. Check /help")
         return
 
@@ -20,9 +20,9 @@ async def _set_property(message: types.Message, prop: str, value=None):
                                      f"jacket, outdoors, streets</code>", parse_mode='HTML')
         return
     elif prompt is None:
-        prompt = Prompt(message.get_args(), creator=message.from_id)
+        prompt = Prompt((message.get_args() if is_command else message.text), creator=message.from_id)
 
-    prompt.__setattr__(prop, message.get_args() if value is None else value)
+    prompt.__setattr__(prop, (message.get_args() if is_command else message.text) if value is None else value)
     prompt.creator = message.from_id
     db[DBTables.prompts][message.from_id] = prompt
 
@@ -33,19 +33,19 @@ async def _set_property(message: types.Message, prop: str, value=None):
 
 
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_prompt_command(message: types.Message):
-    await _set_property(message, 'prompt')
+async def set_prompt_command(message: types.Message, is_command: bool = True):
+    await _set_property(message, 'prompt', is_command=is_command)
 
 
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_negative_prompt_command(message: types.Message):
-    await _set_property(message, 'negative_prompt')
+async def set_negative_prompt_command(message: types.Message, is_command: bool = True):
+    await _set_property(message, 'negative_prompt', is_command=is_command)
 
 
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_steps_command(message: types.Message):
+async def set_steps_command(message: types.Message, is_command: bool = True):
     try:
-        _ = int(message.get_args())
+        _ = int((message.get_args() if is_command else message.text))
     except Exception as e:
         assert e
         await message.reply('❌ Specify number as argument')
@@ -55,41 +55,25 @@ async def set_steps_command(message: types.Message):
         await message.reply('❌ Specify number <= 30')
         return
 
-    await _set_property(message, 'steps')
+    await _set_property(message, 'steps', is_command=is_command)
 
 
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_cfg_scale_command(message: types.Message):
+async def set_cfg_scale_command(message: types.Message, is_command: bool = True):
     try:
-        _ = int(message.get_args())
+        _ = int((message.get_args() if is_command else message.text))
     except Exception as e:
         assert e
         await message.reply('❌ Specify number as argument')
         return
 
-    await _set_property(message, 'cfg_scale')
+    await _set_property(message, 'cfg_scale', is_command=is_command)
 
 
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_width_command(message: types.Message):
+async def set_width_command(message: types.Message, is_command: bool = True):
     try:
-        _ = int(message.get_args())
-    except Exception as e:
-        assert e
-        await message.reply('❌ Specify number as argument')
-        return
-
-    if _ > 768:
-        await message.reply('❌ Specify number <= 768')
-        return
-
-    await _set_property(message, 'width')
-
-
-@throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_height_command(message: types.Message):
-    try:
-        _ = int(message.get_args())
+        _ = int((message.get_args() if is_command else message.text))
     except Exception as e:
         assert e
         await message.reply('❌ Specify number as argument')
@@ -99,40 +83,56 @@ async def set_height_command(message: types.Message):
         await message.reply('❌ Specify number <= 768')
         return
 
-    await _set_property(message, 'height')
+    await _set_property(message, 'width', is_command=is_command)
 
 
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_restore_faces_command(message: types.Message):
+async def set_height_command(message: types.Message, is_command: bool = True):
     try:
-        _ = bool(message.get_args())
+        _ = int((message.get_args() if is_command else message.text))
+    except Exception as e:
+        assert e
+        await message.reply('❌ Specify number as argument')
+        return
+
+    if _ > 768:
+        await message.reply('❌ Specify number <= 768')
+        return
+
+    await _set_property(message, 'height', is_command=is_command)
+
+
+@throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
+async def set_restore_faces_command(message: types.Message, is_command: bool = True):
+    try:
+        _ = bool((message.get_args() if is_command else message.text))
     except Exception as e:
         assert e
         await message.reply('❌ Specify boolean <code>True</code>/<code>False</code> as argument',
                             parse_mode='HTML')
         return
 
-    await _set_property(message, 'restore_faces')
+    await _set_property(message, 'restore_faces', is_command=is_command)
 
 
 @wrap_exception()
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_sampler_command(message: types.Message):
+async def set_sampler_command(message: types.Message, is_command: bool = True):
     from bot.modules.api.samplers import get_samplers
-    if message.get_args() not in (samplers := await get_samplers()):
+    if (message.get_args() if is_command else message.text) not in (samplers := await get_samplers()):
         await message.reply(
             f'❌ You can use only {", ".join(f"<code>{x}</code>" for x in samplers)}',
             parse_mode='HTML'
         )
         return
 
-    await _set_property(message, 'sampler')
+    await _set_property(message, 'sampler', is_command=is_command)
 
 
 @throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
-async def set_size_command(message: types.Message):
+async def set_size_command(message: types.Message, is_command: bool = True):
     try:
-        hxw = message.get_args().split('x')
+        hxw = (message.get_args() if is_command else message.text).split('x')
         height = int(hxw[0])
         width = int(hxw[1])
     except Exception as e:
@@ -145,5 +145,5 @@ async def set_size_command(message: types.Message):
         await message.reply('❌ Specify numbers <= 768')
         return
 
-    await _set_property(message, 'height', height)
-    await _set_property(message, 'width', width)
+    await _set_property(message, 'height', height, is_command=is_command)
+    await _set_property(message, 'width', width, is_command=is_command)
