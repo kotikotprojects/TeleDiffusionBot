@@ -64,7 +64,7 @@ Add value to `DB_CHAT` variable. For me it is `-816497374`
 
 ### DB_PATH
 Path to folder where `db` and `dbmeta` are stored. `dbmeta` is file, that you need to copy when moving to other hosting
-to restore database. Path can be `.` to store in same folder
+to restore database. Path can be `.` to store in same folder. For me now it is `/home/barstiger/db/TeleDiffusionBot`
 
 ### ENCRYPTION_KEY
 Password to encrypt some database fields. Do not share it.
