@@ -75,6 +75,6 @@ Type `/start` in new bot PM to set up everything.
 Install [AUTOMATIC1111 webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
 and run it with `--api` argument (for me arguments are `--no-half --xformers --api --listen` to properly work with newer SD models and work in local network) 
 
-Run `/setendpoint http://endpoint_address:port`
+Run `/setendpoint http://endpoint_address:port`. For me now it is `http://192.168.50.30:7860`, WITHOUT BACKSLASH at the end
 
 Bot is ready to use!
