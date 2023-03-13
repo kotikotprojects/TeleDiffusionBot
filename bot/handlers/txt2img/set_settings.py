@@ -79,8 +79,8 @@ async def set_width_command(message: types.Message, is_command: bool = True):
         await message.reply('❌ Specify number as argument')
         return
 
-    if _ > 768:
-        await message.reply('❌ Specify number <= 768')
+    if _ > 768 or _ < 256:
+        await message.reply('❌ Specify number <= 768 and >= 256')
         return
 
     await _set_property(message, 'width', is_command=is_command)
@@ -95,8 +95,8 @@ async def set_height_command(message: types.Message, is_command: bool = True):
         await message.reply('❌ Specify number as argument')
         return
 
-    if _ > 768:
-        await message.reply('❌ Specify number <= 768')
+    if _ > 768 or _ < 256:
+        await message.reply('❌ Specify number <= 768 and >= 256')
         return
 
     await _set_property(message, 'height', is_command=is_command)
