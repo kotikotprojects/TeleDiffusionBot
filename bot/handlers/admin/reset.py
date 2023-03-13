@@ -11,7 +11,7 @@ async def resetqueue(message: types.Message, is_command: bool = True):
                             'It is only for this bot instance maintainers and admins')
         return
 
-    if is_command and message.text.lower() != 'reset':
+    if not is_command and message.text.lower() != 'reset':
         return
 
     db[DBTables.queue]['n'] = 0
