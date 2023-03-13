@@ -141,8 +141,8 @@ async def set_size_command(message: types.Message, is_command: bool = True):
                             parse_mode='HTML')
         return
 
-    if height > 768 or width > 768:
-        await message.reply('❌ Specify numbers <= 768')
+    if height > 768 or width > 768 or height < 256 or width < 256:
+        await message.reply('❌ Specify numbers <= 768 and >= 256')
         return
 
     await _set_property(message, 'height', height, is_command=is_command)
