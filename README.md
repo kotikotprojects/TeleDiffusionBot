@@ -64,7 +64,7 @@ Add value to `DB_CHAT` variable. For me it is `-816497374`
 
 ### DB_PATH
 Path to folder where `db` and `dbmeta` are stored. `dbmeta` is file, that you need to copy when moving to other hosting
-to restore database. Path can be `.` to store in same folder
+to restore database. Path can be `.` to store in same folder. For me now it is `/home/barstiger/db/TeleDiffusionBot`
 
 ### ENCRYPTION_KEY
 Password to encrypt some database fields. Do not share it.
@@ -73,8 +73,8 @@ Password to encrypt some database fields. Do not share it.
 Type `/start` in new bot PM to set up everything. 
 
 Install [AUTOMATIC1111 webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
-and run it with `--api` argument (for me arguments are `--no-half --xformers --api`)
+and run it with `--api` argument (for me arguments are `--no-half --xformers --api --listen` to properly work with newer SD models and work in local network) 
 
-Run `/setendpoint http://endpoint_address:port`
+Run `/setendpoint http://endpoint_address:port`. For me now it is `http://192.168.50.30:7860`, WITHOUT BACKSLASH at the end
 
 Bot is ready to use!
