@@ -47,6 +47,20 @@ They should be in `KEY='VALUE'` format
 ### TOKEN
 Bot token from BotFather
 
+Bot `privacy` should be disabled.
+```
+Sequence within a BotFather chat:
+You: /setprivacy
+BotFather: Choose a bot to change group messages settings.
+You: @your_name_bot
+BotFather: 'Enable' - your bot will only receive messages that either start with the '/' symbol or mention the bot by username.
+'Disable' - your bot will receive all messages that people send to groups.
+Current status is: ENABLED
+You: Disable
+BotFather: Success! The new status is: DISABLED. /help
+```
+[Source](https://stackoverflow.com/questions/38565952/how-to-receive-messages-in-group-chats-using-telegram-bot-api)
+
 ### ADMIN
 Your id. To get it, use [@userinfobot](https://t.me/userinfobot). Send any message to this bot and copy your id.
 
