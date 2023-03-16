@@ -32,6 +32,9 @@ Setup bot as usually, environment setup is described later
 ### If hosting locally:
 Create `.env` file in root of bot directory
 
+### Important
+Remember to run `/start` command in bot from admin account to set everything up after filling environment and running it.
+
 ## Environment
 ```env
 TOKEN=
@@ -46,6 +49,20 @@ Add these variables to `.env` file or set up environment key-value on your hosti
 They should be in `KEY='VALUE'` format
 ### TOKEN
 Bot token from BotFather
+
+Bot `privacy` should be disabled.
+```
+Sequence within a BotFather chat:
+You: /setprivacy
+BotFather: Choose a bot to change group messages settings.
+You: @your_name_bot
+BotFather: 'Enable' - your bot will only receive messages that either start with the '/' symbol or mention the bot by username.
+'Disable' - your bot will receive all messages that people send to groups.
+Current status is: ENABLED
+You: Disable
+BotFather: Success! The new status is: DISABLED. /help
+```
+[Source](https://stackoverflow.com/questions/38565952/how-to-receive-messages-in-group-chats-using-telegram-bot-api)
 
 ### ADMIN
 Your id. To get it, use [@userinfobot](https://t.me/userinfobot). Send any message to this bot and copy your id.
@@ -73,7 +90,10 @@ Password to encrypt some database fields. Do not share it.
 Type `/start` in new bot PM to set up everything. 
 
 Install [AUTOMATIC1111 webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
-and run it with `--api` argument (for me arguments are `--no-half --xformers --api --listen` to properly work with newer SD models and work in local network) 
+and run it with `--api` argument (for me arguments are `--no-half --xformers --api --listen` to properly work with newer SD models and work in local network). 
+Make sure that `Add model name to generation information` is enabled in settings!
+
+![](https://user-images.githubusercontent.com/16289552/225164914-8423cab7-6b85-42e8-b799-c89bfe8b7692.png)
 
 Run `/setendpoint http://endpoint_address:port`. For me now it is `http://192.168.50.30:7860`, WITHOUT BACKSLASH at the end
 
