@@ -23,6 +23,75 @@ async def set_endpoint(message: types.Message, is_command: bool = True):
 
     await message.reply("✅ New url set")
 
+@throttle(5)
+async def add_whitelist(message: types.Message, is_command: bool = True):
+    if message.from_id != ADMIN:
+        await message.reply('❌ You are not permitted to do that. It is only for main admin')
+        return
+
+    if not (message.get_args() if is_command else message.text).isdecimal() and not \
+            hasattr(message.reply_to_message, 'text') and (message.chat.id >= 0):
+        await message.reply('❌ Put new whitelist chat ID to command arguments')
+        return
+    elif not (message.get_args() if is_command else message.text).isdecimal() and not \
+            hasattr(message.reply_to_message, 'text') and (message.chat.id < 0):
+        ID = message.chat.id
+        await message.reply(f'Chat ID: {message.chat.id} Chat title: {message.chat.title}')
+    elif not (message.get_args() if is_command else message.text).isdecimal():
+        ID = message.reply_to_message.from_id
+    elif not hasattr(message.reply_to_message, 'text'):
+        ID = int((message.get_args() if is_command else message.text))
+
+    if not isinstance(db[DBTables.config].get('whitelist'), list):
+        db[DBTables.config]['whitelist'] = list()
+
+    if ID not in db[DBTables.config].get('whitelist'):
+        whitelist_ = db[DBTables.config].get('whitelist')
+        whitelist_.append(ID)
+        db[DBTables.config]['whitelist'] = whitelist_
+    else:
+        await message.reply('❌ This whitelist is added already')
+        return
+
+    await db[DBTables.config].write()
+
+    await message.reply("✅ Added whitelist")
+
+@throttle(5)
+async def remove_whitelist(message: types.Message, is_command: bool = True):
+    if message.from_id != ADMIN:
+        await message.reply('❌ You are not permitted to do that. It is only for main admin')
+        return
+
+    if not (message.get_args() if is_command else message.text).isdecimal() and not \
+            hasattr(message.reply_to_message, 'text') and (message.chat.id >= 0:
+        await message.reply('❌ Put whitelist ID to command arguments or answer to users message')
+        return
+    elif not (message.get_args() if is_command else message.text).isdecimal() and not \
+            hasattr(message.reply_to_message, 'text') and (message.chat.id < 0):
+        ID = message.chat.id
+        await message.reply(f'Chat ID: {message.chat.id} Chat title: {message.chat.title}')
+    elif not (message.get_args() if is_command else message.text).isdecimal():
+        ID = message.reply_to_message.from_id
+    elif not hasattr(message.reply_to_message, 'text'):
+        ID = int((message.get_args() if is_command else message.text))
+
+    if not isinstance(db[DBTables.config].get('whitelist'), list):
+        db[DBTables.config]['whitelist'] = list()
+
+    if ID not in db[DBTables.config].get('whitelist'):
+        await message.reply('❌ This whitelist is not added')
+        return
+    else:
+        whitelist_ = db[DBTables.config].get('whitelist')
+        whitelist_.remove(ID)
+        db[DBTables.config]['whitelist'] = whitelist_
+
+    await db[DBTables.config].write()
+
+    await message.reply("✅ Removed whitelist")
+
+
 
 @throttle(5)
 async def add_admin(message: types.Message, is_command: bool = True):

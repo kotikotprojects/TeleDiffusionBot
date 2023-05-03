@@ -18,6 +18,10 @@ async def generate_command(message: types.Message):
         await message.reply('💔 Generation is disabled by admins now. Try again later')
         await temp_message.delete()
         return
+    elif (message.chat.id not in db[DBTables.config]['whitelist'] and message.from_id not in db[DBTables.config]['whitelist']):
+        await message.reply('❌You are not on the white list, access denied. Contact admin @kilisauros for details')
+        await temp_message.delete()
+        return
 
     try:
         prompt = get_prompt(user_id=message.from_id,
