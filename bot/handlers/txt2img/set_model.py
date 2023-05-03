@@ -15,5 +15,5 @@ async def set_model_command(message: types.Message):
     else:
         await message.reply('❌ No models available')
         return
-
+    await message.reply("Examples of models (with additional info): https://telegra.ph/Opisanie-raboty-modelej-05-03")
     await message.reply("🪄 You can choose model from available:", reply_markup=get_set_model_keyboard(0))
