@@ -7,8 +7,11 @@ from bot.utils.errorable_command import wrap_exception
 
 
 @wrap_exception()
-@throttle(cooldown=30*60, admin_ids=db[DBTables.config].get('admins'), by_id=False)
+@throttle(cooldown=5*60, admin_ids=db[DBTables.config].get('admins'), by_id=False)
 async def set_model_command(message: types.Message):
+    if (message.chat.id not in db[DBTables.config]['whitelist'] and message.from_id not in db[DBTables.config]['whitelist']):
+        await message.reply('❌You are not on the white list, access denied. Contact admin @kilisauros for details')
+        return
     models = await get_models()
     if models is not None and len(models) > 0:
         db[DBTables.config]['models'] = models
