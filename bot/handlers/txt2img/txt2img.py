@@ -1,4 +1,5 @@
 import re
+from bot.common import bot
 from aiogram import types
 from bot.db import db, DBTables
 from bot.utils.cooldown import throttle
@@ -8,6 +9,8 @@ from bot.modules.api.objects.prompt_request import Generated
 from bot.modules.api.status import wait_for_status
 from bot.keyboards.image_info import get_img_info_keyboard
 from bot.utils.errorable_command import wrap_exception
+from bot.callbacks.factories.image_info import (prompt_only, full_prompt, import_prompt, back)
+
 
 
 @wrap_exception([ValueError], custom_loading=True)
@@ -43,6 +46,16 @@ async def generate_command(message: types.Message):
         db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
         image = await txt2img(prompt)
         image_message = await message.reply_photo(photo=image[0])
+        
+        #Send photo to SD Image Archive
+        # message_data = 
+
+        archive_message = f'User ID:   {message.from_id} \n \
+        User nickname:  {message.from_user.full_name} \n \
+        User username:  @{message.from_user.username}'
+        # archive_message = f'{callback_data=full_prompt.new(p_id=f"{image_message.photo[0].file_unique_id}")} + "User ID: " + message.from_id + " User nickname: " + message.from_user.full_name + " User username: " + message.from_user.username'
+        await bot.send_photo(-929754401, photo=image[0], caption=archive_message, reply_markup=get_img_info_keyboard(image_message.photo[0].file_unique_id))
+
 
         db[DBTables.generated][image_message.photo[0].file_unique_id] = Generated(
             prompt=prompt,
