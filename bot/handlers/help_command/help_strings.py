@@ -17,5 +17,7 @@ help_data = {
     'setmodel': '(global) Sets StableDiffusion model for all users. Can be used only once an hour',
     'setendpoint': '(admin) Set StableDiffusion API endpoint',
     'addadmin': '(admin) Add new admin - reply to message or type user ID',
-    'rmadmin': '(admin) Remove admin - reply to message or type user ID'
+    'rmadmin': '(admin) Remove admin - reply to message or type user ID',
+    'addwhitelist': '(admin) Add new whitelist - reply to message or type user ID',
+    'rmwhitelist': '(admin) Remove whitelist - reply to message or type user ID'
 }

@@ -3,7 +3,7 @@ from rich import print
 
 def register_handlers():
     from bot.handlers import (
-        initialize, admin, help_command, txt2img, image_info, config
+        initialize, admin, help_command, txt2img, image_info, config, whitelist
     )
 
     initialize.register()

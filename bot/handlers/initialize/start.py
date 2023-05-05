@@ -18,6 +18,13 @@ async def start_command(message: types.Message):
             await db[DBTables.config].write()
             await message.reply(f'✅ Added {message.from_user.username} to admins. You can add other admins, '
                                 f'check bot settings menu')
+        if ADMIN not in db[DBTables.config].get('whitelist'):
+            whitelist_ = db[DBTables.config].get('whitelist')
+            whitelist_.append(ADMIN)
+            db[DBTables.config]['whitelist'] = whitelist_
+            await db[DBTables.config].write()
+            await message.reply(f'✅ Added {message.from_user.username} to whitelist. You can add other users to whitelist, '
+                                f'check bot settings menu')
         if db[DBTables.config].get('enabled') is None:
             db[DBTables.config]['enabled'] = True
             await message.reply(f'✅ Generation is enabled now')
