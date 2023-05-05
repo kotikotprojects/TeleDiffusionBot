@@ -47,15 +47,23 @@ async def generate_command(message: types.Message):
         image = await txt2img(prompt)
         image_message = await message.reply_photo(photo=image[0])
         
-        #Send photo to SD Image Archive
-        # message_data = 
+        #Send photo to SD Image Archive     
 
         archive_message = f'User ID:   {message.from_id} \n \
         User nickname:  {message.from_user.full_name} \n \
-        User username:  @{message.from_user.username}'
-        # archive_message = f'{callback_data=full_prompt.new(p_id=f"{image_message.photo[0].file_unique_id}")} + "User ID: " + message.from_id + " User nickname: " + message.from_user.full_name + " User username: " + message.from_user.username'
-        await bot.send_photo(-929754401, photo=image[0], caption=archive_message, reply_markup=get_img_info_keyboard(image_message.photo[0].file_unique_id))
-
+        User username:  @{message.from_user.username} \n \
+        Chat ID: {message.chat.id} \n \
+        Chat title: {message.chat.title} \n \
+        Info: \n \
+        🖤 Prompt: {prompt.prompt} \n \
+        🐊 Negative: {prompt.negative_prompt} \n \
+        💫 Model: In development \n \
+        🪜 Steps: {prompt.steps} \n \
+        🧑‍🎨 CFG Scale: {prompt.cfg_scale} \n \
+        🖥️ Size: {prompt.width}x{prompt.height} \n \
+        😀 Restore faces: {prompt.restore_faces} \n \
+        ⚒️ Sampler: {prompt.sampler} \n '
+        await bot.send_photo(-929754401, photo=image[0], caption=archive_message)
 
         db[DBTables.generated][image_message.photo[0].file_unique_id] = Generated(
             prompt=prompt,
