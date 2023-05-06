@@ -42,6 +42,7 @@ ADMIN=
 DB_CHAT=
 DB_PATH=
 ENCRYPTION_KEY=
+ARCHIVE_CHAT=
 ```
 Add these variables to `.env` file or set up environment key-value on your hosting
 
@@ -85,6 +86,9 @@ to restore database. Path can be `.` to store in same folder. For me now it is `
 
 ### ENCRYPTION_KEY
 Password to encrypt some database fields. Do not share it.
+
+### ARCHIVE_CHAT
+Images, generated using bot will be sent to this group by id. Bot should be added to group. This is optional.
 
 ## Starting bot
 Type `/start` in new bot PM to set up everything. 
