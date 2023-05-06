@@ -30,7 +30,7 @@ def throttle(cooldown: int = 5, by_id: bool = True, admin_ids: list = None):
             if not last_time:
                 last_time = delta
 
-            if last_time <= delta or user_id in admin_ids:
+            if last_time <= delta:
                 try:
                     f_name_dict = db[DBTables.cooldown][func.__name__]
                     f_name_dict[user_id] = now
