@@ -2,6 +2,7 @@ import re
 from bot.common import bot
 from aiogram import types
 from bot.db import db, DBTables
+from bot.config import ARCHIVE_CHAT
 from bot.utils.cooldown import throttle
 from bot.modules.api.txt2img import txt2img
 from bot.modules.api.objects.get_prompt import get_prompt
@@ -9,8 +10,6 @@ from bot.modules.api.objects.prompt_request import Generated
 from bot.modules.api.status import wait_for_status
 from bot.keyboards.image_info import get_img_info_keyboard
 from bot.utils.errorable_command import wrap_exception
-from bot.callbacks.factories.image_info import (prompt_only, full_prompt, import_prompt, back)
-
 
 
 @wrap_exception([ValueError], custom_loading=True)
@@ -21,8 +20,9 @@ async def generate_command(message: types.Message):
         await message.reply('💔 Generation is disabled by admins now. Try again later')
         await temp_message.delete()
         return
-    elif (message.chat.id not in db[DBTables.config]['whitelist'] and message.from_id not in db[DBTables.config]['whitelist']):
-        await message.reply('❌You are not on the white list, access denied. Contact admin @kilisauros for details')
+    elif db[DBTables.config].get('whitelist') and (message.chat.id not in db[DBTables.config]['whitelist']
+          and message.from_id not in db[DBTables.config]['whitelist']):
+        await message.reply('❌ You are not on the white list, access denied. ')
         await temp_message.delete()
         return
 
@@ -46,24 +46,25 @@ async def generate_command(message: types.Message):
         db[DBTables.queue]['n'] = db[DBTables.queue].get('n', 1) - 1
         image = await txt2img(prompt)
         image_message = await message.reply_photo(photo=image[0])
-        
-        #Send photo to SD Image Archive     
 
-        archive_message = f'User ID:   {message.from_id} \n \
-        User nickname:  {message.from_user.full_name} \n \
-        User username:  @{message.from_user.username} \n \
-        Chat ID: {message.chat.id} \n \
-        Chat title: {message.chat.title} \n \
-        Info: \n \
-        🖤 Prompt: {prompt.prompt} \n \
-        🐊 Negative: {prompt.negative_prompt} \n \
-        💫 Model: In development \n \
-        🪜 Steps: {prompt.steps} \n \
-        🧑‍🎨 CFG Scale: {prompt.cfg_scale} \n \
-        🖥️ Size: {prompt.width}x{prompt.height} \n \
-        😀 Restore faces: {prompt.restore_faces} \n \
-        ⚒️ Sampler: {prompt.sampler} \n '
-        await bot.send_photo(-929754401, photo=image[0], caption=archive_message)
+        if ARCHIVE_CHAT:
+            archive_message = (
+                f"User ID:   {message.from_id}"
+                f"User nickname:  {message.from_user.full_name}"
+                f"User username:  @{message.from_user.username}"
+                f"Chat ID: {message.chat.id}"
+                f"Chat title: {message.chat.title}"
+                f"Info:"
+                f"🖤 Prompt: {prompt.prompt}"
+                f"🐊 Negative: {prompt.negative_prompt}"
+                f"💫 Model: In development"
+                f"🪜 Steps: {prompt.steps}"
+                f"🧑‍🎨 CFG Scale: {prompt.cfg_scale}"
+                f"🖥️ Size: {prompt.width}x{prompt.height}"
+                f"😀 Restore faces: {prompt.restore_faces}"
+                f"⚒️ Sampler: {prompt.sampler}"
+            )
+            await bot.send_photo(ARCHIVE_CHAT, photo=image[0], caption=archive_message)
 
         db[DBTables.generated][image_message.photo[0].file_unique_id] = Generated(
             prompt=prompt,
