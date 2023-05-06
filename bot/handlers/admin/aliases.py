@@ -23,6 +23,7 @@ async def set_endpoint(message: types.Message, is_command: bool = True):
 
     await message.reply("✅ New url set")
 
+
 @throttle(5)
 async def add_whitelist(message: types.Message, is_command: bool = True):
     if message.from_id != ADMIN:
@@ -57,6 +58,7 @@ async def add_whitelist(message: types.Message, is_command: bool = True):
 
     await message.reply("✅ Added whitelist")
 
+
 @throttle(5)
 async def remove_whitelist(message: types.Message, is_command: bool = True):
     if message.from_id != ADMIN:
@@ -64,7 +66,7 @@ async def remove_whitelist(message: types.Message, is_command: bool = True):
         return
 
     if not (message.get_args() if is_command else message.text).isdecimal() and not \
-            hasattr(message.reply_to_message, 'text') and (message.chat.id >= 0:
+            hasattr(message.reply_to_message, 'text') and (message.chat.id) >= 0:
         await message.reply('❌ Put whitelist ID to command arguments or answer to users message')
         return
     elif not (message.get_args() if is_command else message.text).isdecimal() and not \
@@ -91,6 +93,16 @@ async def remove_whitelist(message: types.Message, is_command: bool = True):
 
     await message.reply("✅ Removed whitelist")
 
+
+@throttle(5)
+async def get_whitelist(message: types.Message, is_command: bool = True):
+    if message.from_id != ADMIN:
+        await message.reply('❌ You are not permitted to do that. It is only for main admin')
+        return
+
+    await message.reply(f"✅ Whitelisted ids: {db[DBTables.config].get('whitelist')}"
+                        if db[DBTables.config].get('whitelist') else
+                        '❌ Whitelist is disabled. Everyone can use the bot. Add someone to whitelist to enable it')
 
 
 @throttle(5)

@@ -18,6 +18,7 @@ help_data = {
     'setendpoint': '(admin) Set StableDiffusion API endpoint',
     'addadmin': '(admin) Add new admin - reply to message or type user ID',
     'rmadmin': '(admin) Remove admin - reply to message or type user ID',
-    'addwhitelist': '(admin) Add new whitelist - reply to message or type user ID',
-    'rmwhitelist': '(admin) Remove whitelist - reply to message or type user ID'
+    'addwhitelist': '(admin) Add to whitelist - reply to message or type user ID',
+    'rmwhitelist': '(admin) Remove from whitelist - reply to message or type user ID',
+    'getwhitelist': '(admin) Get current whitelist and check if it is enabled'
 }
