@@ -93,7 +93,12 @@ Images, generated using bot will be sent to this group by id. Bot should be adde
 ## Starting bot
 Type `/start` in new bot PM to set up everything. 
 
-Install [AUTOMATIC1111 webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+If you see errors or warnings (such as `🔄️ Bot database synchronised because of restart. 
+If you tried to run a command, run it again`), run `/start` command again and again until you
+will receive expected output (some messages with `👋 Hello, YOUR NAME....` and `✅` boxes). It is needed to 
+mark up database and create all tables, restart bot and sync database.
+
+After that, install [AUTOMATIC1111 webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
 and run it with `--api` argument (for me arguments are `--no-half --xformers --api --listen` to properly work with newer SD models and work in local network). 
 Make sure that `Add model name to generation information` is enabled in settings!
 
@@ -102,3 +107,14 @@ Make sure that `Add model name to generation information` is enabled in settings
 Run `/setendpoint http://endpoint_address:port`. For me now it is `http://192.168.50.30:7860`, WITHOUT BACKSLASH at the end
 
 Bot is ready to use!
+
+### If something doesnt work, check subsequence of actions:
+
+- clone repo
+- cd to repo
+- create python venv
+- install requirements
+- create `.env` file and fill it
+- run `python main.py`
+- `/start` 2-3 times to bot private messages (until you see expected output)
+- `/setendpoint` command with proper args
