@@ -14,4 +14,4 @@ async def on_off_call(message: types.Message, is_command=None):
     db[DBTables.config]['enabled'] = False if message.text.lower() == 'off' else True
     await db[DBTables.config].write()
 
-    await message.reply(f"Generation enabled: {'💚 (yes)' if db[DBTables.config]['enabled'] else '💔 (no)'}")
+    await message.reply(f"Generation enabled: {'💚 (yes)' if db[DBTables.config].get('enabled') else '💔 (no)'}")
