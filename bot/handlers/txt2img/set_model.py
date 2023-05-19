@@ -7,7 +7,7 @@ from bot.utils.errorable_command import wrap_exception
 
 
 @wrap_exception()
-@throttle(cooldown=5*60, admin_ids=db[DBTables.config].get('admins'), by_id=False)
+@throttle(cooldown=5*60, admin_ids=db[DBTables.config].get('admins', []), by_id=False)
 async def set_model_command(message: types.Message):
     if db[DBTables.config].get('whitelist') and \
             (message.chat.id not in db[DBTables.config]['whitelist'] and

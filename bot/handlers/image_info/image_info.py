@@ -6,7 +6,7 @@ from bot.utils.errorable_command import wrap_exception
 
 
 @wrap_exception([IndexError])
-@throttle(cooldown=10, admin_ids=db[DBTables.config].get('admins'))
+@throttle(cooldown=10, admin_ids=db[DBTables.config].get('admins', []))
 async def imginfo(message: types.Message):
     try:
         if not hasattr(message.reply_to_message, 'photo'):

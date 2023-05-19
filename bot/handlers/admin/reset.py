@@ -6,7 +6,7 @@ from bot.utils.cooldown import throttle
 
 @throttle(5)
 async def resetqueue(message: types.Message, is_command: bool = True):
-    if message.from_id not in db[DBTables.config].get('admins') and message.from_id != ADMIN:
+    if message.from_id not in db[DBTables.config].get('admins', []) and message.from_id != ADMIN:
         await message.reply('❌ You are not permitted to do that. '
                             'It is only for this bot instance maintainers and admins')
         return

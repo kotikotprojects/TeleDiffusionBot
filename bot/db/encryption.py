@@ -17,9 +17,15 @@ fernet = Fernet(
 )
 
 
-def encrypt(s: str) -> bytes:
-    return fernet.encrypt(s.encode())
+def encrypt(s: str) -> bytes | None:
+    try:
+        return fernet.encrypt(s.encode())
+    except TypeError:
+        return None
 
 
-def decrypt(s: bytes) -> str:
-    return fernet.decrypt(s).decode()
+def decrypt(s: bytes) -> str | None:
+    try:
+        return fernet.decrypt(s).decode()
+    except TypeError:
+        return None

@@ -6,7 +6,7 @@ from bot.utils.errorable_command import wrap_exception
 
 
 @wrap_exception()
-@throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
+@throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins', []))
 async def get_current(message: types.Message):
     prompt: Prompt = db[DBTables.prompts].get(message.from_id)
     if prompt is None:

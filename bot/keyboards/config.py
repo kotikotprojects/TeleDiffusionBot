@@ -8,7 +8,7 @@ def get_config_keyboard(user_id: int) -> types.InlineKeyboardMarkup:
         types.InlineKeyboardButton("Prompt settings", callback_data="prompt_settings_kb"),
         types.InlineKeyboardButton("Global settings", callback_data="global_settings_kb")
     ]
-    if user_id in db[DBTables.config].get('admins'):
+    if user_id in db[DBTables.config].get('admins', []):
         buttons.append(
             types.InlineKeyboardButton("Admin settings", callback_data="admin_settings_kb")
         )

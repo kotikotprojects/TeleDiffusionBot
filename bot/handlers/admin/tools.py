@@ -6,7 +6,7 @@ from bot.modules.get_hash.get_hash import get_hash
 
 
 @wrap_exception([IndexError])
-@throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins'))
+@throttle(cooldown=5, admin_ids=db[DBTables.config].get('admins', []))
 async def hash_command(message: types.Message):
     try:
         if not hasattr(message.reply_to_message, 'photo') or not hasattr(message.reply_to_message, 'document'):

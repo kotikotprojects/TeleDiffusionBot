@@ -15,7 +15,7 @@ async def on_global_settings_kb_open(call: types.CallbackQuery):
 
 
 @wrap_exception()
-@throttle(cooldown=60*60, admin_ids=db[DBTables.config].get('admins'), by_id=False)
+@throttle(cooldown=60*60, admin_ids=db[DBTables.config].get('admins', []), by_id=False)
 async def on_set_model(call: types.CallbackQuery):
     from bot.keyboards.set_model import get_set_model_keyboard
     from bot.modules.api.models import get_models

@@ -6,6 +6,6 @@ from bot.keyboards.config import get_config_keyboard
 
 
 @wrap_exception()
-@throttle(cooldown=20, admin_ids=db[DBTables.config].get('admins'), by_id=False)
+@throttle(cooldown=20, admin_ids=db[DBTables.config].get('admins', []), by_id=False)
 async def config_command(message: types.Message):
     await message.reply("⚙️ Configuration:", reply_markup=get_config_keyboard(message.from_id))

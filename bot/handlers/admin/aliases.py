@@ -7,7 +7,7 @@ from bot.utils.cooldown import throttle
 
 @throttle(5)
 async def set_endpoint(message: types.Message, is_command: bool = True):
-    if message.from_id not in db[DBTables.config].get('admins') and message.from_id != ADMIN:
+    if message.from_id not in db[DBTables.config].get('admins', []) and message.from_id != ADMIN:
         await message.reply('❌ You are not permitted to do that. '
                             'It is only for this bot instance maintainers and admins')
         return
@@ -46,8 +46,8 @@ async def add_whitelist(message: types.Message, is_command: bool = True):
     if not isinstance(db[DBTables.config].get('whitelist'), list):
         db[DBTables.config]['whitelist'] = list()
 
-    if ID not in db[DBTables.config].get('whitelist'):
-        whitelist_ = db[DBTables.config].get('whitelist')
+    if ID not in db[DBTables.config].get('whitelist', []):
+        whitelist_ = db[DBTables.config].get('whitelist', [])
         whitelist_.append(ID)
         db[DBTables.config]['whitelist'] = whitelist_
     else:
@@ -81,11 +81,11 @@ async def remove_whitelist(message: types.Message, is_command: bool = True):
     if not isinstance(db[DBTables.config].get('whitelist'), list):
         db[DBTables.config]['whitelist'] = list()
 
-    if ID not in db[DBTables.config].get('whitelist'):
+    if ID not in db[DBTables.config].get('whitelist', []):
         await message.reply('❌ This whitelist is not added')
         return
     else:
-        whitelist_ = db[DBTables.config].get('whitelist')
+        whitelist_ = db[DBTables.config].get('whitelist', [])
         whitelist_.remove(ID)
         db[DBTables.config]['whitelist'] = whitelist_
 
@@ -101,7 +101,7 @@ async def get_whitelist(message: types.Message, is_command: bool = True):
         return
 
     await message.reply(f"✅ Whitelisted ids: {db[DBTables.config].get('whitelist')}"
-                        if db[DBTables.config].get('whitelist') else
+                        if db[DBTables.config].get('whitelist', []) else
                         '❌ Whitelist is disabled. Everyone can use the bot. Add someone to whitelist to enable it')
 
 
@@ -123,8 +123,8 @@ async def add_admin(message: types.Message, is_command: bool = True):
     if not isinstance(db[DBTables.config].get('admins'), list):
         db[DBTables.config]['admins'] = list()
 
-    if ID not in db[DBTables.config].get('admins'):
-        admins_ = db[DBTables.config].get('admins')
+    if ID not in db[DBTables.config].get('admins', []):
+        admins_ = db[DBTables.config].get('admins', [])
         admins_.append(ID)
         db[DBTables.config]['admins'] = admins_
     else:
@@ -154,11 +154,11 @@ async def remove_admin(message: types.Message, is_command: bool = True):
     if not isinstance(db[DBTables.config].get('admins'), list):
         db[DBTables.config]['admins'] = list()
 
-    if ID not in db[DBTables.config].get('admins'):
+    if ID not in db[DBTables.config].get('admins', []):
         await message.reply('❌ This admin is not added')
         return
     else:
-        admins_ = db[DBTables.config].get('admins')
+        admins_ = db[DBTables.config].get('admins', [])
         admins_.remove(ID)
         db[DBTables.config]['admins'] = admins_
 

@@ -11,19 +11,12 @@ async def start_command(message: types.Message):
                             f'so we will check config for you now')
         if not isinstance(db[DBTables.config].get('admins'), list):
             db[DBTables.config]['admins'] = list()
-        if ADMIN not in db[DBTables.config].get('admins'):
-            admins_ = db[DBTables.config].get('admins')
+        if ADMIN not in db[DBTables.config].get('admins', []):
+            admins_ = db[DBTables.config].get('admins', [])
             admins_.append(ADMIN)
             db[DBTables.config]['admins'] = admins_
             await db[DBTables.config].write()
             await message.reply(f'✅ Added {message.from_user.username} to admins. You can add other admins, '
-                                f'check bot settings menu')
-        if ADMIN not in db[DBTables.config].get('whitelist'):
-            whitelist_ = db[DBTables.config].get('whitelist')
-            whitelist_.append(ADMIN)
-            db[DBTables.config]['whitelist'] = whitelist_
-            await db[DBTables.config].write()
-            await message.reply(f'✅ Added {message.from_user.username} to whitelist. You can add other users to whitelist, '
                                 f'check bot settings menu')
         if db[DBTables.config].get('enabled') is None:
             db[DBTables.config]['enabled'] = True
