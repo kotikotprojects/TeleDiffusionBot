@@ -69,12 +69,12 @@ BotFather: Success! The new status is: DISABLED. /help
 Your id. To get it, use [@userinfobot](https://t.me/userinfobot). Send any message to this bot and copy your id.
 
 ### DB_CHAT
-This is needed to host database in telegram. Create new group or use old group with databases.
+This is needed to host database in telegram. Create new group or use old group with databases. Invite your bot to this group and ensure it has access to messages or give admin rights to bot.
 Invite @RawDataBot to your group:
 
 ![](https://i.imgur.com/7qs9QRT.png)
 
-Find this string and kick bot:
+Find this string and kick RawDataBot:
 
 ![](https://i.imgur.com/6BYwbkN.png)
 
